@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from network import BasicBlock, Bottleneck
+from resnet import BasicBlock, Bottleneck
 
 
 def model_flattening(module_tree):

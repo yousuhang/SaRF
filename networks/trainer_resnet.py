@@ -1,17 +1,17 @@
 import pandas as pd
 import torch
-from metric_tracker import MetricTracker
-from network import resnet18
+from evaluation.metric_tracker import MetricTracker
+from networks.resnet import resnet18
 import os
 import torch.utils.data as data
 import torchvision.transforms as transforms
-from evaluator import Evaluator
+from evaluation.evaluator import Evaluator
 import numpy as np
 from tqdm import tqdm
-from h5_dataset import HDF5Dataset
-import deep_taylor as sa_map
+from utils.h5_dataset import HDF5Dataset
+from networks import deep_taylor as sa_map
 from torch.autograd import Variable
-from losses import ClassDistinctivenessLoss, PrelogitsSaliencySimLoss
+from losses.losses import ClassDistinctivenessLoss, PrelogitsSaliencySimLoss
 
 
 class ResnetTrainer():
@@ -81,7 +81,7 @@ class ResnetTrainer():
         self.class_distive = ClassDistinctivenessLoss(device=self.opt.gpu_id)
         self.pre_logit_sal_sim = PrelogitsSaliencySimLoss(device=self.opt.gpu_id)
         # self.min_sal_loss = ClassSaliencyMinLoss(device=self.opt.gpu_id)
-        ## metrics
+        ## evaluation
         self.metric_tracker = MetricTracker()
 
     def loss_function(self, logits, labels, saliency_list, pre_logits, alpha1 = 1, alpha2 = 1, alpha3 = 1):
@@ -221,7 +221,7 @@ class ResnetTrainer():
                     label = label.to(self.opt.gpu_id)
                     label = label.squeeze().long()
                 losses = self.train_one_step(image, label)
-            print('batch train loss at epoch {} is {}'.format(epoch, losses['train_loss']))
+            print('batch train losses at epoch {} is {}'.format(epoch, losses['train_loss']))
             if epoch % 5 == 0 or epoch % 2 == 0:
                 self.metric_tracker.update_metrics(losses, smoothe=False)
             losses, metrics, sal_dis = self.eval()

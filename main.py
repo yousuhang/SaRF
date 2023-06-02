@@ -1,6 +1,6 @@
 import argparse
 import os
-from trainer_resnet import ResnetTrainer
+from networks.trainer_resnet import ResnetTrainer
 
 
 def get_source_classifier_options(parser):
@@ -30,7 +30,7 @@ def get_source_classifier_options(parser):
     parser.add_argument("--lr", default=0.00001, type=float)
 
     ## display
-    ## loss weight
+    ## losses weight
     parser.add_argument("--alpha_1", default=0, type = float, help="weight on class saliency distinctiveness")
     parser.add_argument("--alpha_2", default=0, type = float, help="weight on pre_logits vs saliency per class similarity")
     parser.add_argument("--alpha_3", default=0, type=float, help="weight on saliency sparseness")
